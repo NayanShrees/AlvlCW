@@ -1,9 +1,6 @@
 package sceneController;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -35,7 +32,7 @@ import javafx.stage.WindowEvent;
 public class InsertController {
 	private static Stage stage;
 	public static int count = 0;
-	
+	public ObservableList<String> pay = FXCollections.observableArrayList();
 	@FXML AnchorPane p_insert;
 	@FXML Label lbl_title;
 	@FXML Label lbl_first;
@@ -59,7 +56,7 @@ public class InsertController {
 	@FXML PasswordField pass_Password;
 	@FXML PasswordField pass_CPassword;
 	@FXML Label lbl_Pay;
-	@FXML ComboBox<String> cmb_pay;
+	@FXML ComboBox<String> cmb_pay = new ComboBox<>(pay);
 	@FXML TextField txt_Pay;
 	@FXML Button btn_Pay;
 	@FXML CheckBox chk_Manager;
@@ -115,7 +112,6 @@ public class InsertController {
 	}
 	
 	public void loadPay(){
-		ObservableList<String> pay = FXCollections.observableArrayList();
 		ResultSet rs = Paydb.loadPay();
 		try {
 			while(rs.next()){
@@ -124,7 +120,6 @@ public class InsertController {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		cmb_pay.setItems(pay);
 	}
 	
 	public void submitClick() throws Exception{

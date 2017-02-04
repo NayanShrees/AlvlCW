@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import application.Main;
-import javafx.scene.control.TableView;
 
 public class Employeedb {
 
