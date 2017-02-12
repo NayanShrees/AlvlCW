@@ -16,13 +16,6 @@ public class Logindb {
 	public static boolean verified = false;
 	public static String sSalt;
 
-	public Logindb(Boolean managerdb, String usernamedb, String passworddb, boolean verified){
-		this.managerdb = managerdb;
-		this.usernamedb = usernamedb;
-		this.passworddb = passworddb;
-		this.verified = verified;
-	}
-
 	public static boolean verify(String userName, String passWord) throws Exception{
 		Hashing.vHash = true;
 		PreparedStatement qState = Main.maindb.newQ("SELECT EmployeeID, Manager, UserName, PassWord, Salt FROM Login ORDER by EmployeeID");

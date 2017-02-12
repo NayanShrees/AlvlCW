@@ -1,14 +1,6 @@
 package sceneController;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import com.sun.javafx.scene.layout.region.SliceSequenceConverter;
-
-import application.Hashing;
 import application.Main;
-import database.Employeedb;
 import database.Logindb;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

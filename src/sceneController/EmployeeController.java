@@ -1,22 +1,15 @@
 package sceneController;
 
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import application.Main;
 import application.Reset;
-import database.DatabaseConnect;
 import database.Employeedb;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -27,12 +20,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.util.Callback;
 import javafx.util.Duration;
 
 public class EmployeeController {
@@ -99,9 +90,7 @@ public class EmployeeController {
 	public void myInfo(){
 		String[] columnNames = {"EmployeeID", "FirstName", "Surname", "Age", "AddressLine1", "TownOrCity", "Postcode", "Number"};
 		String Query = "SELECT EmployeeID, FirstName, Surname, Age, AddressLine1, TownOrCity, TownOrCity, Number from Employee";
-		
-		col_Info = new TableView<>();
-		
+				
 		for (int i = 0; i < columnNames.length; i++) {
 			final int finalIdx = i;
 			TableColumn<ObservableList<String>, String> column = new TableColumn<>(columnNames[i]);

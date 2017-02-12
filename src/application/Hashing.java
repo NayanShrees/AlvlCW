@@ -14,7 +14,8 @@ public final class Hashing {
 	public static String generateHash(String passWord, byte[] salt)throws Exception{
 		Base64.Encoder enc = Base64.getEncoder();
 		if(vHash == false){
-			salt = SecureRandom.getInstance("SHA1PRNG").getSeed(99);
+			SecureRandom.getInstance("SHA1PRNG");
+			salt = SecureRandom.getSeed(99);
 			Logindb.sSalt = enc.encodeToString(salt);
 		}else{
 			salt = Base64.getDecoder().decode(salt);

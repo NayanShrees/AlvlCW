@@ -5,11 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import application.Main;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 
 public class Employeedb {
 
@@ -53,21 +50,21 @@ public class Employeedb {
 		}
 
 	}
-	
+
 	public ObservableList<ObservableList<String>> newTableView(String query,int numOfCols){
 
 		ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
+
 		try{
-			//SQL FOR SELECTING ALL Records that match the query
-			//ResultSet (Set that contains all sql)
 			ResultSet rs = DatabaseConnect.connection.createStatement().executeQuery(query);
-			//Data added to ObservableList *
 
 			while(rs.next()){
 				//Iterate Row
 				ObservableList<String> innerlist = FXCollections.observableArrayList();
-				for(int i = 1;i<numOfCols+1;i++){
-					innerlist.add(rs.getString(i));
+				if(employeeIDdb.equals(rs.getInt("EmployeeID"))){
+					for(int i = 1;i<numOfCols+1;i++){
+						innerlist.add(rs.getString(i));
+					}
 				}
 				data.add(innerlist);
 			}
