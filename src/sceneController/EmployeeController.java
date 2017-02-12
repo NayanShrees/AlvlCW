@@ -8,10 +8,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import application.Main;
 import application.Reset;
+import database.DatabaseConnect;
 import database.Employeedb;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -43,7 +45,7 @@ public class EmployeeController {
 	@FXML private Button btn_checkOut;
 	@FXML private Button btn_back;
 	@FXML private Button btn_exit;
-	@FXML private TableView col_Info;
+	@FXML private TableView<ObservableList<String>> col_Info;
 	@FXML private TableView checkinOut;
 
 	@FXML void initialize(){
@@ -95,30 +97,20 @@ public class EmployeeController {
 	}
 
 	public void myInfo(){
-		ObservableList data = FXCollections.observableArrayList();
-		ResultSet employeeInfo = Employeedb.readAll();
-		try{
-			while(employeeInfo.next()){
-				Integer chkEmp = employeeInfo.getInt("EmployeeID");
-				if(Employeedb.employeeIDdb.equals(chkEmp)){
-					data.add(employeeInfo.getString("FirstName"));
-					data.add(employeeInfo.getString("Surname"));
-					data.add(employeeInfo.getInt("Age"));
-					data.add(employeeInfo.getString("AddressLine1"));
-					data.add(employeeInfo.getString("TownOrCity"));
-					data.add(employeeInfo.getString("Postcode"));
-					data.add(employeeInfo.getString("Number"));
-					
-					ObservableList<String> row = FXCollections.observableArrayList();
-					for(int i=1 ; i<=employeeInfo.getMetaData().getColumnCount(); i++){
-	                    row.add(employeeInfo.getString(i));
-	                }
-					data.add(row);
-				}
-			}
-		}catch(SQLException resultsexception){
-			resultsexception.printStackTrace();
+		String[] columnNames = {"EmployeeID", "FirstName", "Surname", "Age", "AddressLine1", "TownOrCity", "Postcode", "Number"};
+		String Query = "SELECT EmployeeID, FirstName, Surname, Age, AddressLine1, TownOrCity, TownOrCity, Number from Employee";
+		
+		col_Info = new TableView<>();
+		
+		for (int i = 0; i < columnNames.length; i++) {
+			final int finalIdx = i;
+			TableColumn<ObservableList<String>, String> column = new TableColumn<>(columnNames[i]);
+			column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx)));
+			col_Info.getColumns().add(column);
 		}
+		
+		Employeedb dConnect = new Employeedb();
+		col_Info.setItems(dConnect.newTableView(Query, columnNames.length));
 		attendance();
 	}
 
