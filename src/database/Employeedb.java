@@ -61,11 +61,11 @@ public class Employeedb {
 			while(rs.next()){
 				//Iterate Row
 				ObservableList<String> innerlist = FXCollections.observableArrayList();
-				if(employeeIDdb.equals(rs.getInt("EmployeeID"))){
+				
 					for(int i = 1;i<numOfCols+1;i++){
 						innerlist.add(rs.getString(i));
 					}
-				}
+				
 				data.add(innerlist);
 			}
 		}catch(Exception e){

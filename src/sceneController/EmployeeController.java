@@ -89,7 +89,7 @@ public class EmployeeController {
 
 	public void myInfo(){
 		String[] columnNames = {"EmployeeID", "FirstName", "Surname", "Age", "AddressLine1", "TownOrCity", "Postcode", "Number"};
-		String Query = "SELECT EmployeeID, FirstName, Surname, Age, AddressLine1, TownOrCity, TownOrCity, Number from Employee";
+		String Query = "SELECT EmployeeID, FirstName, Surname, Age, AddressLine1, TownOrCity, Postcode, Number from Employee";
 				
 		for (int i = 0; i < columnNames.length; i++) {
 			final int finalIdx = i;
