@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.sql.PreparedStatement;
 
 public class DatabaseConnect {
@@ -50,6 +54,30 @@ public class DatabaseConnect {
 			System.out.println("Database query error: " + queryexception.getMessage());
 			return null;
 		}
+	}
+	
+	public static ObservableList<ObservableList<String>> newTableView(String query,int numOfCols){
+
+		ObservableList<ObservableList<String>> userData = FXCollections.observableArrayList();
+
+		try{
+			ResultSet rs = connection.createStatement().executeQuery(query);
+
+			while(rs.next()){
+				//Iterate Row
+				ObservableList<String> innerlist = FXCollections.observableArrayList();
+				
+					for(int i = 1;i<numOfCols+1;i++){
+						innerlist.add(rs.getString(i));
+					}
+				
+					userData.add(innerlist);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			System.err.println("Error on Building Data");             
+		}
+		return userData;
 	}
 	
 	public void disconnect()

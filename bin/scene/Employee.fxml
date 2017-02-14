@@ -6,21 +6,21 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="422.0" prefWidth="789.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sceneController.EmployeeController">
+<AnchorPane prefHeight="422.0" prefWidth="789.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sceneController.EmployeeController">
    <children>
       <AnchorPane fx:id="p_employeeP" layoutY="2.0" prefHeight="205.0" prefWidth="789.0">
          <children>
-            <Label fx:id="lbl_date" layoutY="74.0" prefHeight="45.0" prefWidth="178.0" text="Inert:Date" textAlignment="CENTER">
+            <Label fx:id="lbl_time" layoutX="14.0" layoutY="14.0" prefHeight="45.0" prefWidth="178.0" text="Insert:Time" textAlignment="CENTER">
                <font>
                   <Font size="25.0" />
                </font>
             </Label>
-            <Label fx:id="lbl_time" layoutY="14.0" prefHeight="45.0" prefWidth="178.0" text="Insert:Time" textAlignment="CENTER">
+            <TableView fx:id="tbl_info" layoutX="14.0" layoutY="70.0" prefHeight="65.0" prefWidth="763.0" />
+            <Label fx:id="lbl_date" layoutX="597.0" layoutY="14.0" prefHeight="45.0" prefWidth="178.0" text="Insert:Date" textAlignment="CENTER">
                <font>
                   <Font size="25.0" />
                </font>
             </Label>
-            <TableView fx:id="col_Info" layoutX="161.0" layoutY="14.0" prefHeight="120.0" prefWidth="599.0" />
          </children>
       </AnchorPane>
       <Button fx:id="btn_checkIn" layoutX="14.0" layoutY="343.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="178.0" text="Check In">

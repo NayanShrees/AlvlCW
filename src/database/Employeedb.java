@@ -5,8 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import application.Main;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 public class Employeedb {
 
@@ -49,29 +47,5 @@ public class Employeedb {
 			e.printStackTrace();
 		}
 
-	}
-
-	public ObservableList<ObservableList<String>> newTableView(String query,int numOfCols){
-
-		ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
-
-		try{
-			ResultSet rs = DatabaseConnect.connection.createStatement().executeQuery(query);
-
-			while(rs.next()){
-				//Iterate Row
-				ObservableList<String> innerlist = FXCollections.observableArrayList();
-				
-					for(int i = 1;i<numOfCols+1;i++){
-						innerlist.add(rs.getString(i));
-					}
-				
-				data.add(innerlist);
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			System.err.println("Error on Building Data");             
-		}
-		return data;
 	}
 }

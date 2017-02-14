@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import application.Main;
 import application.Reset;
+import database.DatabaseConnect;
 import database.Employeedb;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -36,8 +37,8 @@ public class EmployeeController {
 	@FXML private Button btn_checkOut;
 	@FXML private Button btn_back;
 	@FXML private Button btn_exit;
-	@FXML private TableView<ObservableList<String>> col_Info;
-	@FXML private TableView checkinOut;
+	@FXML private TableView<ObservableList<String>> tbl_info;
+	@FXML private TableView<ObservableList<String>> tbl_checkin;
 
 	@FXML void initialize(){
 		try{
@@ -48,7 +49,8 @@ public class EmployeeController {
 			assert btn_checkOut != null : "Check out button was not loaded!";
 			assert btn_back != null : "Back button was not loaded!";
 			assert btn_exit != null : "Exit button was not loaded!";
-			assert col_Info != null : "Table was not loaded!";
+			assert tbl_info != null : "Table was not loaded!";
+			assert tbl_checkin != null : "Table was not loaded!";
 		}catch(AssertionError ae){
 			System.out.println("Assertion Error " + ae.getMessage());
 			Main.terminate();
@@ -89,22 +91,31 @@ public class EmployeeController {
 
 	public void myInfo(){
 		String[] columnNames = {"EmployeeID", "FirstName", "Surname", "Age", "AddressLine1", "TownOrCity", "Postcode", "Number"};
-		String Query = "SELECT EmployeeID, FirstName, Surname, Age, AddressLine1, TownOrCity, Postcode, Number from Employee";
+		String Query = "SELECT EmployeeID, FirstName, Surname, Age, AddressLine1, TownOrCity, Postcode, Number from Employee Where EmployeeID = " + Employeedb.employeeIDdb;
 
 		for (int i = 0; i < columnNames.length; i++) {
 			final int finalIdx = i;
 			TableColumn<ObservableList<String>, String> column = new TableColumn<>(columnNames[i]);
 			column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx)));
-			col_Info.getColumns().add(column);
+			tbl_info.getColumns().add(column);
 		}
 
-		Employeedb dConnect = new Employeedb();
-		col_Info.setItems(dConnect.newTableView(Query, columnNames.length));
+		tbl_info.setItems(DatabaseConnect.newTableView(Query, columnNames.length));
 		attendance();
 	}
 
 	public void attendance(){
+		String[] columnNames = {"EmployeeID", "Date", "Check In", "Check Out"};
+		String Query = "SELECT EmployeeID, Date, CheckIn, CheckOut, CheckedIn from CheckInOut Where EmployeeID = " + Employeedb.employeeIDdb;
 
+		for (int i = 0; i < columnNames.length; i++) {
+			final int finalIdx = i;
+			TableColumn<ObservableList<String>, String> column = new TableColumn<>(columnNames[i]);
+			column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx)));
+			tbl_checkin.getColumns().add(column);
+		}
+
+		tbl_checkin.setItems(DatabaseConnect.newTableView(Query, columnNames.length));
 	}
 
 	public void back(){
