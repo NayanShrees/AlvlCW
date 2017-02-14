@@ -2,8 +2,6 @@ package sceneController;
 
 import java.io.IOException;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import application.Hashing;
 import application.Main;
 import application.Reset;
