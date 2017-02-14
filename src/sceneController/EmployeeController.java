@@ -89,7 +89,7 @@ public class EmployeeController {
 
 	}
 
-	public void myInfo(){
+	private void myInfo(){
 		String[] columnNames = {"EmployeeID", "FirstName", "Surname", "Age", "AddressLine1", "TownOrCity", "Postcode", "Number"};
 		String Query = "SELECT EmployeeID, FirstName, Surname, Age, AddressLine1, TownOrCity, Postcode, Number from Employee Where EmployeeID = " + Employeedb.employeeIDdb;
 
@@ -104,7 +104,7 @@ public class EmployeeController {
 		attendance();
 	}
 
-	public void attendance(){
+	private void attendance(){
 		String[] columnNames = {"EmployeeID", "Date", "Check In", "Check Out"};
 		String Query = "SELECT EmployeeID, Date, CheckIn, CheckOut, CheckedIn from CheckInOut Where EmployeeID = " + Employeedb.employeeIDdb;
 
