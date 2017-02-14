@@ -90,14 +90,14 @@ public class EmployeeController {
 	public void myInfo(){
 		String[] columnNames = {"EmployeeID", "FirstName", "Surname", "Age", "AddressLine1", "TownOrCity", "Postcode", "Number"};
 		String Query = "SELECT EmployeeID, FirstName, Surname, Age, AddressLine1, TownOrCity, Postcode, Number from Employee";
-				
+
 		for (int i = 0; i < columnNames.length; i++) {
 			final int finalIdx = i;
 			TableColumn<ObservableList<String>, String> column = new TableColumn<>(columnNames[i]);
 			column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx)));
 			col_Info.getColumns().add(column);
 		}
-		
+
 		Employeedb dConnect = new Employeedb();
 		col_Info.setItems(dConnect.newTableView(Query, columnNames.length));
 		attendance();
