@@ -115,13 +115,11 @@ public class InsertController {
 		ResultSet rs = Paydb.loadPay();
 		try {
 			while(rs.next()){
-				pay.add(
-						new String (rs.getString("PayPerHour"))
-						);
+				pay.add(rs.getString("PayPerHour"));
 			}
-		cmb_pay.getItems().addAll(pay);
+		cmb_pay.setItems(FXCollections.observableArrayList(pay));
 		
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
