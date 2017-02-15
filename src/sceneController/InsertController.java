@@ -2,12 +2,13 @@ package sceneController;
 
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.util.List;
+
 import application.Hashing;
 import application.Main;
 import application.Reset;
 import database.Employeedb;
 import database.Logindb;
-import database.Paydb;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -18,6 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -30,6 +32,8 @@ import javafx.stage.WindowEvent;
 public class InsertController {
 	private static Stage stage;
 	public static int count = 0;
+	
+	
 	@FXML AnchorPane p_insert;
 	@FXML Label lbl_title;
 	@FXML Label lbl_first;
@@ -53,7 +57,7 @@ public class InsertController {
 	@FXML PasswordField pass_Password;
 	@FXML PasswordField pass_CPassword;
 	@FXML Label lbl_Pay;
-	@FXML ComboBox<String> cmb_pay;
+	@FXML ChoiceBox cmb_pay;
 	@FXML TextField txt_Pay;
 	@FXML Button btn_Pay;
 	@FXML CheckBox chk_Manager;
@@ -109,17 +113,7 @@ public class InsertController {
 	}
 	
 	public void loadPay(){
-		ObservableList<String> pay = FXCollections.observableArrayList();
-		ResultSet rs = Paydb.loadPay();
-		try {
-			while(rs.next()){
-				pay.add(rs.getString("PayPerHour"));
-			}
-		cmb_pay.setItems(FXCollections.observableArrayList(pay));
 		
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public void submitClick() throws Exception{
