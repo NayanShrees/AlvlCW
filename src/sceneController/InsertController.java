@@ -1,9 +1,8 @@
 package sceneController;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.List;
-
 import application.Hashing;
 import application.Main;
 import application.Reset;
@@ -20,7 +19,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -32,7 +30,7 @@ import javafx.stage.WindowEvent;
 public class InsertController {
 	private static Stage stage;
 	public static int count = 0;
-	
+	public static ResultSet rs;
 	
 	@FXML AnchorPane p_insert;
 	@FXML Label lbl_title;
@@ -57,7 +55,7 @@ public class InsertController {
 	@FXML PasswordField pass_Password;
 	@FXML PasswordField pass_CPassword;
 	@FXML Label lbl_Pay;
-	@FXML ChoiceBox cmb_pay;
+	@FXML ChoiceBox<String> cmb_pay;
 	@FXML TextField txt_Pay;
 	@FXML Button btn_Pay;
 	@FXML CheckBox chk_Manager;
@@ -97,8 +95,17 @@ public class InsertController {
 			System.out.println("Assertion Error " + ae.getMessage());
 			Main.terminate();
 		}
-		
-		
+		PreparedStatement qState = Main.maindb.newQ("SELECT PayID, PayPerHour From PayStat ORDER by PayID");
+		rs = Main.maindb.runQuery(qState);
+		ObservableList<String> pay = FXCollections.observableArrayList();
+		try {
+			while(rs.next()){
+				pay.add(rs.getString("PayPerHour"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		cmb_pay.setItems(pay);
 	}
 	
 	public void prepareStageEvents(Stage insertStage){
@@ -109,11 +116,6 @@ public class InsertController {
 				Main.terminate();
 			}
 		});
-		loadPay();
-	}
-	
-	public void loadPay(){
-		
 	}
 	
 	public void submitClick() throws Exception{
