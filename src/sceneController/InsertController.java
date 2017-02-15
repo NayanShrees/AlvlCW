@@ -95,6 +95,8 @@ public class InsertController {
 			System.out.println("Assertion Error " + ae.getMessage());
 			Main.terminate();
 		}
+		
+		
 		PreparedStatement qState = Main.maindb.newQ("SELECT PayID, PayPerHour From PayStat ORDER by PayID");
 		rs = Main.maindb.runQuery(qState);
 		ObservableList<String> pay = FXCollections.observableArrayList();
