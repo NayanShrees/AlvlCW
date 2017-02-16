@@ -21,7 +21,5 @@ public class Reset {
 		Logindb.verified = false;
 
 		Hashing.vHash = false;
-		
-		InsertController.count = 0;
 	}
 }

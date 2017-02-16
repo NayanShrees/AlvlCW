@@ -39,7 +39,7 @@ public class Logindb {
 		return verified;
 	}
 
-	public static boolean newLog(){
+	public static void newLog(){
 		
 		try {
 			PreparedStatement addState = DatabaseConnect.connection.prepareStatement("INSERT INTO Login(EmployeeID, Manager, UserName, PassWord, Salt) " +
@@ -51,13 +51,7 @@ public class Logindb {
 			addState.setString(5, sSalt);
 			addState.executeUpdate();
 		} catch (SQLException ex) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Error");
-			alert.setHeaderText("Username clash!");
-			alert.setContentText("Please enter a new username!");
-			alert.showAndWait();
-			return false;
+			ex.printStackTrace();
 		}
-		return true;
 	}
 }

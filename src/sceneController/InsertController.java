@@ -1,19 +1,21 @@
 package sceneController;
 
 import java.io.IOException;
+import java.security.spec.RSAOtherPrimeInfo;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import application.Hashing;
 import application.Main;
 import application.Reset;
+import database.DatabaseConnect;
 import database.Employeedb;
 import database.Logindb;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,6 +29,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -34,9 +37,8 @@ import javafx.stage.WindowEvent;
 
 public class InsertController {
 	private static Stage stage;
-	public static int count = 0;
 	public static ResultSet rs;
-	
+
 	@FXML AnchorPane p_insert;
 	@FXML Label lbl_title;
 	@FXML Label lbl_first;
@@ -65,7 +67,7 @@ public class InsertController {
 	@FXML RadioButton rad_pay;
 	@FXML CheckBox chk_Manager;
 	@FXML Button btn_Submit;
-	
+
 	@FXML void initialize(){
 		try{
 			assert p_insert != null : "AnchorPane was not loaded";
@@ -100,8 +102,8 @@ public class InsertController {
 			System.out.println("Assertion Error " + ae.getMessage());
 			Main.terminate();
 		}
-		
-		
+
+
 		PreparedStatement qState = Main.maindb.newQ("SELECT PayID, PayPerHour From PayStat ORDER by PayID");
 		rs = Main.maindb.runQuery(qState);
 		ObservableList<String> pay = FXCollections.observableArrayList();
@@ -113,23 +115,26 @@ public class InsertController {
 			e.printStackTrace();
 		}
 		cmb_pay.setItems(pay);
-		
-		
+		cmb_pay.getSelectionModel().selectFirst();
+		cmb_pay.setTooltip(new Tooltip("Select pay per week"));
+		rad_pay.setTooltip(new Tooltip("Choose to add a new amount or select a preset"));
+		txt_Pay.setTooltip(new Tooltip("Add a new pay"));
+
 		rad_pay.selectedProperty().addListener(new ChangeListener<Boolean>(){
 			public void changed(ObservableValue<? extends Boolean> obs, Boolean wasPreviouslySelected, Boolean isNowSelected) {
-		        if (isNowSelected) { 
-		            System.out.println("Selected");
-		            txt_Pay.setDisable(false);
-		            cmb_pay.setDisable(true);
-		        } else {
-		            System.out.println("Unselected");
-		            txt_Pay.setDisable(true);
-		            cmb_pay.setDisable(false);
-		        }
-		    }
+				if (isNowSelected) { 
+					System.out.println("Selected");
+					txt_Pay.setDisable(false);
+					cmb_pay.setDisable(true);
+				} else {
+					System.out.println("Unselected");
+					txt_Pay.setDisable(true);
+					cmb_pay.setDisable(false);
+				}
+			}
 		});
 	}
-	
+
 	public void prepareStageEvents(Stage insertStage){
 		System.out.println("Preparing stage events");
 		InsertController.stage = insertStage;
@@ -139,9 +144,36 @@ public class InsertController {
 			}
 		});
 	}
-	
+
+
+
+	public void test() throws Exception{
+		String pay;
+
+		pay = cmb_pay.getValue();
+		System.out.println(pay);
+		Alert alert = new Alert(AlertType.WARNING);
+		PreparedStatement qState = Main.maindb.newQ("SELECT UserName FROM Login");
+		ResultSet run = Main.maindb.runQuery(qState);
+		try{
+			while(run.next()){
+				System.out.println("Swag");
+				if(txt_UserName.getText().equals(run.getString("UserName"))){
+					alert.setHeaderText("Username Clash!");
+					alert.setContentText("Please enter in a new Username!");
+					alert.showAndWait();
+					return;
+				}
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void submitClick() throws Exception{
 		boolean vCheck = false;
+		String pay;
+
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Warning");
 		if(txt_first.getText().isEmpty() || txt_second.getText().isEmpty() || txt_age.getText().isEmpty()){
@@ -175,12 +207,23 @@ public class InsertController {
 		}else{
 			vCheck = true;
 		}
-		
+
 		if(vCheck == true){
-			count++;
-			if(count == 1){
-				Employeedb.writeNew(txt_first.getText(), txt_second.getText(), Integer.parseInt(txt_age.getText()), txt_addLine1.getText(), txt_town.getText(), txt_postcode.getText(), txt_phone.getText());
+			PreparedStatement qState = Main.maindb.newQ("SELECT UserName FROM Login");
+			ResultSet run = Main.maindb.runQuery(qState);
+			try{
+				while(run.next()){
+					if(txt_UserName.getText().equals(run.getString("UserName"))){
+						alert.setHeaderText("Username Clash!");
+						alert.setContentText("Please enter in a new Username!");
+						alert.showAndWait();
+						return;
+					}
+				}
+			}catch (SQLException e) {
+				e.printStackTrace();
 			}
+			Employeedb.writeNew(txt_first.getText(), txt_second.getText(), Integer.parseInt(txt_age.getText()), txt_addLine1.getText(), txt_town.getText(), txt_postcode.getText(), txt_phone.getText());
 			Hashing.vHash = false;
 			Logindb.managerdb = chk_Manager.isSelected();
 			Logindb.usernamedb = txt_UserName.getText();
@@ -188,6 +231,29 @@ public class InsertController {
 			if(Logindb.newLog() == false){
 				return;
 			}
+
+			if(rad_pay.isSelected() == false){
+				pay = cmb_pay.getValue();
+				pay = pay.replace("£", "");
+
+				qState = Main.maindb.newQ("SELECT PayID, PayPerHour FROM PayStat ORDER By PayID");
+				ResultSet rsPay = Main.maindb.runQuery(qState);
+				try{
+					while(rsPay.next()){
+						if(pay.equals(rs.getString("PayPerHour"))){
+							qState = DatabaseConnect.connection.prepareStatement("INSERT INTO Pay(EmployeeID, PayID) " +
+									"VALUES(?, ?)");
+						}
+					}
+				}catch(SQLException e){
+					e.printStackTrace();
+				}
+			}else{
+
+			}
+
+
+
 			alert.setHeaderText("Returning");
 			alert.setContentText("Try logging in now");
 			alert.showAndWait();
@@ -205,6 +271,6 @@ public class InsertController {
 			}
 			stage.close();
 		}
-		
+
 	}
 }
