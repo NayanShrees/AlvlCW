@@ -3,13 +3,17 @@ package sceneController;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
 import application.Hashing;
 import application.Main;
 import application.Reset;
 import database.Employeedb;
 import database.Logindb;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +25,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
@@ -57,7 +62,7 @@ public class InsertController {
 	@FXML Label lbl_Pay;
 	@FXML ChoiceBox<String> cmb_pay;
 	@FXML TextField txt_Pay;
-	@FXML Button btn_Pay;
+	@FXML RadioButton rad_pay;
 	@FXML CheckBox chk_Manager;
 	@FXML Button btn_Submit;
 	
@@ -88,7 +93,7 @@ public class InsertController {
 			assert lbl_Pay != null : "Pay label was not loaded";
 			assert cmb_pay != null : "Pay ComboBox was not loaded";
 			assert txt_Pay != null : "Pay TextField was not loaded";
-			assert btn_Pay != null : "Pay Button was not loaded";		
+			assert rad_pay != null : "Pay Button was not loaded";		
 			assert chk_Manager != null : "Manager check button was not loaded";
 			assert btn_Submit != null : "Submit button was not loaded";
 		}catch(AssertionError ae){
@@ -102,12 +107,27 @@ public class InsertController {
 		ObservableList<String> pay = FXCollections.observableArrayList();
 		try {
 			while(rs.next()){
-				pay.add(rs.getString("PayPerHour"));
+				pay.add("£" + rs.getString("PayPerHour"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		cmb_pay.setItems(pay);
+		
+		
+		rad_pay.selectedProperty().addListener(new ChangeListener<Boolean>(){
+			public void changed(ObservableValue<? extends Boolean> obs, Boolean wasPreviouslySelected, Boolean isNowSelected) {
+		        if (isNowSelected) { 
+		            System.out.println("Selected");
+		            txt_Pay.setDisable(false);
+		            cmb_pay.setDisable(true);
+		        } else {
+		            System.out.println("Unselected");
+		            txt_Pay.setDisable(true);
+		            cmb_pay.setDisable(false);
+		        }
+		    }
+		});
 	}
 	
 	public void prepareStageEvents(Stage insertStage){

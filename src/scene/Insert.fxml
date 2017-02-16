@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
@@ -78,14 +79,18 @@
                </font>
             </Label>
             <PasswordField fx:id="pass_CPassword" layoutX="477.0" layoutY="184.0" prefHeight="25.0" prefWidth="243.0" />
-            <Label fx:id="lbl_Pay" layoutX="327.0" layoutY="214.0" prefHeight="27.0" prefWidth="43.0" text="Pay">
+            <Label fx:id="lbl_Pay" layoutX="327.0" layoutY="214.0" prefHeight="27.0" prefWidth="59.0" text="Pay/W">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <ChoiceBox fx:id="cmb_pay" layoutX="370.0" layoutY="214.0" prefHeight="25.0" prefWidth="100.0" />
-            <TextField fx:id="txt_Pay" layoutX="477.0" layoutY="215.0" prefHeight="25.0" prefWidth="112.0" promptText="Pay:  ££.pp" />
-            <Button fx:id="btn_Pay" layoutX="602.0" layoutY="215.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="118.0" text="Add New Pay" />
+            <ChoiceBox fx:id="cmb_pay" layoutX="387.0" layoutY="215.0" prefHeight="25.0" prefWidth="100.0" />
+            <RadioButton fx:id="rad_pay" layoutX="501.0" layoutY="214.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="100.0" text="Add Pay">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </RadioButton>
+            <TextField fx:id="txt_Pay" disable="true" layoutX="610.0" layoutY="215.0" prefHeight="25.0" prefWidth="112.0" promptText="Pay:  ££.pp" />
             <CheckBox fx:id="chk_Manager" layoutX="327.0" layoutY="263.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="144.0" text="Manager">
                <font>
                   <Font size="23.0" />
