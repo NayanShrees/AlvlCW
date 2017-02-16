@@ -228,9 +228,7 @@ public class InsertController {
 			Logindb.managerdb = chk_Manager.isSelected();
 			Logindb.usernamedb = txt_UserName.getText();
 			Logindb.passworddb = Hashing.generateHash(pass_Password.getText(), null);
-			if(Logindb.newLog() == false){
-				return;
-			}
+			Logindb.newLog();
 
 			if(rad_pay.isSelected() == false){
 				pay = cmb_pay.getValue();
@@ -238,12 +236,24 @@ public class InsertController {
 
 				qState = Main.maindb.newQ("SELECT PayID, PayPerHour FROM PayStat ORDER By PayID");
 				ResultSet rsPay = Main.maindb.runQuery(qState);
+				boolean payCheck = false;
+				int payID = 0;
 				try{
+
 					while(rsPay.next()){
 						if(pay.equals(rs.getString("PayPerHour"))){
-							qState = DatabaseConnect.connection.prepareStatement("INSERT INTO Pay(EmployeeID, PayID) " +
-									"VALUES(?, ?)");
+							payCheck = true;
+							payID = rs.getInt("PayID");
 						}
+					}
+					if(payCheck == true){
+						qState = DatabaseConnect.connection.prepareStatement("INSERT INTO Pay(EmployeeID, PayID) " +
+								"VALUES(?, ?)");
+						qState.setInt(1, Employeedb.employeeIDdb);
+						qState.setInt(2, payID);
+						qState.executeQuery();
+					}else{
+						System.out.println("Pay Error!");
 					}
 				}catch(SQLException e){
 					e.printStackTrace();

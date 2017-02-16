@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sceneController.InsertController">
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sceneController.InsertController">
    <children>
       <AnchorPane fx:id="p_insert" layoutY="6.0" prefHeight="335.0" prefWidth="748.0">
          <children>
@@ -96,7 +96,7 @@
                   <Font size="23.0" />
                </font>
             </CheckBox>
-            <Button fx:id="btn_Submit" layoutX="479.0" layoutY="255.0" mnemonicParsing="false" onAction="#test" prefHeight="71.0" prefWidth="243.0" text="Submit">
+            <Button fx:id="btn_Submit" layoutX="479.0" layoutY="255.0" mnemonicParsing="false" onAction="#submitClick" prefHeight="71.0" prefWidth="243.0" text="Submit">
                <font>
                   <Font size="32.0" />
                </font>
