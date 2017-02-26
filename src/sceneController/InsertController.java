@@ -289,132 +289,133 @@ public class InsertController {
 					}
 				}
 			}
-			//It than checks if the check is true, if the program at any point has been verified than it doesnt run this section.
-			if(vCheck == true){
-				//it checks to see if their is a username clash using this SQl statement
-				PreparedStatement qState = Main.maindb.newQ("SELECT UserName FROM Login");
-				//gets the database data into a result set
-				ResultSet run = Main.maindb.runQuery(qState);
-				//tries to run this code
-				try{
-					//while theres another value for the resultset
-					while(run.next()){
-						//if the username is the same as another than it outputs a dialog saying that the user should change it
-						if(txt_UserName.getText().equals(run.getString("UserName"))){
-							alert.setHeaderText("Username Clash!");
-							alert.setContentText("Please enter in a new Username!");
-							alert.showAndWait();
-							//returns so that the program doesn't carry on
-							return;
-						}
-					}
-					//catches any SQL exception
-				}catch (SQLException e) {
-					//prints the error
-					e.printStackTrace();
-				}
-				//sends the data from the textfield to create an employee
-				Employeedb.writeNew(txt_first.getText(), txt_second.getText(), Integer.parseInt(txt_age.getText()), txt_addLine1.getText(), txt_town.getText(), txt_postcode.getText(), txt_phone.getText());
-				//sets the hash boolean to false so the program can create a hash instead of verifying
-				Hashing.vHash = false;
-				//sets the variable to true or false depending on if the check box is selected
-				Logindb.managerdb = chk_Manager.isSelected();
-				//sets the username and password to the textfield
-				Logindb.usernamedb = txt_UserName.getText();
-				//sets the password to the hashed version of the password hash
-				Logindb.passworddb = Hashing.generateHash(pass_Password.getText(), null);
-				//runs the newLog method so that it creates a new login user with the employeeID generated from the Employeedb.writeNew method
-				Logindb.newLog();
-				//if the radio button isn't selected than the user wants to select a pre-made pay
-				if(rad_pay.isSelected() == false){
-					//tries to assign the value of the selected payID to the new employee
-					try{
-						//statement to add the employeeID and payID into the Pay entity
-						queryState = DatabaseConnect.connection.prepareStatement("INSERT INTO Pay(EmployeeID, PayID) " +
-								"VALUES(?, ?)");
-						//I'm adding the values this way so that SQL injection can be stopped
-						queryState.setInt(1, Employeedb.employeeIDdb);
-						queryState.setInt(2, payID);
-						//updates the database
-						queryState.executeUpdate();
-						//catches any SQL exception
-					}catch(SQLException e){
-						//prints the error
-						e.printStackTrace();
-					}
-					//if the user wanted to add a pay than it runs this section
-				}else{
-					//tries to insert a new PayPerHour while generating a new payID
-					try{
-						//statement to add the Pay and auto-generate payID
-						PreparedStatement addState = DatabaseConnect.connection.prepareStatement("INSERT Into PayStat(PayPerHour) " +
-								"Values(?)", Statement.RETURN_GENERATED_KEYS);
-						//used to stop SQL injection
-						addState.setString(1, pay);
-						//updates the database
-						addState.executeUpdate();
-						//gets the auto-generated value from the database
-						try(ResultSet GeneratedKeys = addState.getGeneratedKeys()){
-							//gets the ID that is generated into payID
-							if(GeneratedKeys.next()){
-								payID = GeneratedKeys.getInt(1);
-							}else{
-								//if there is no generated keys than it throws the SQLException no id obtained
-								throw new SQLException("No ID obtained");
-							}
-						}
-						//tries to assign the employee to the payID
-						try{
-							//statement to insert values into pay
-							qState = DatabaseConnect.connection.prepareStatement("INSERT INTO Pay(EmployeeID, PayID) " +
-									"VALUES(?, ?)");
-							//used to stop SQL injection
-							qState.setInt(1, Employeedb.employeeIDdb);
-							qState.setInt(2, payID);
-							//updates the database
-							qState.executeUpdate();
-							//catches any SQL errors
-						}catch(SQLException e){
-							//prints the error
-							e.printStackTrace();
-						}
-						//if anything went wrong in the whole of it, it instead runs this to stop the program crashing
-					}catch(SQLException e){
-						//prints the error
-						e.printStackTrace();
-					}
-				}
-				//alert to tell the user that it will now be going back to the login scene
-				alert.setHeaderText("Returning");
-				alert.setContentText("Try logging in now");
-				alert.showAndWait();
-				//resets all variables so that it is effectively a new instance of the program
-				Reset.resetVar();
-				//new stage to return to the login scene
-				Stage back = new Stage();
-				//tries to run this section of the code
-				try {
-					//loads the scene
-					Parent root = FXMLLoader.load(getClass().getResource("/scene/login.fxml"));
-					//sets the scene
-					back.setScene(new Scene(root));
-					//sets the title
-					back.setTitle("Login");
-					//shows the stage
-					back.show();
-					//new object to run the methods in a class
-					LoginController controller = new LoginController();
-					//runs the method while parsing the current stage
-					controller.prepareStageEvents(back);
-					//any exception is caught by the program
-				} catch (IOException e) {
-					//prints the error
-					e.printStackTrace();
-				}
-				//closes the current stage
-				stage.close();
-			}
-
 		}
+		//It than checks if the check is true, if the program at any point has been verified than it doesnt run this section.
+		if(vCheck == true){
+			//it checks to see if their is a username clash using this SQl statement
+			PreparedStatement qState = Main.maindb.newQ("SELECT UserName FROM Login");
+			//gets the database data into a result set
+			ResultSet run = Main.maindb.runQuery(qState);
+			//tries to run this code
+			try{
+				//while theres another value for the resultset
+				while(run.next()){
+					//if the username is the same as another than it outputs a dialog saying that the user should change it
+					if(txt_UserName.getText().equals(run.getString("UserName"))){
+						alert.setHeaderText("Username Clash!");
+						alert.setContentText("Please enter in a new Username!");
+						alert.showAndWait();
+						//returns so that the program doesn't carry on
+						return;
+					}
+				}
+				//catches any SQL exception
+			}catch (SQLException e) {
+				//prints the error
+				e.printStackTrace();
+			}
+			//sends the data from the textfield to create an employee
+			Employeedb.writeNew(txt_first.getText(), txt_second.getText(), Integer.parseInt(txt_age.getText()), txt_addLine1.getText(), txt_town.getText(), txt_postcode.getText(), txt_phone.getText());
+			//sets the hash boolean to false so the program can create a hash instead of verifying
+			Hashing.vHash = false;
+			//sets the variable to true or false depending on if the check box is selected
+			Logindb.managerdb = chk_Manager.isSelected();
+			//sets the username and password to the textfield
+			Logindb.usernamedb = txt_UserName.getText();
+			//sets the password to the hashed version of the password hash
+			Logindb.passworddb = Hashing.generateHash(pass_Password.getText(), null);
+			//runs the newLog method so that it creates a new login user with the employeeID generated from the Employeedb.writeNew method
+			Logindb.newLog();
+			//if the radio button isn't selected than the user wants to select a pre-made pay
+			if(rad_pay.isSelected() == false){
+				//tries to assign the value of the selected payID to the new employee
+				try{
+					//statement to add the employeeID and payID into the Pay entity
+					queryState = DatabaseConnect.connection.prepareStatement("INSERT INTO Pay(EmployeeID, PayID) " +
+							"VALUES(?, ?)");
+					//I'm adding the values this way so that SQL injection can be stopped
+					queryState.setInt(1, Employeedb.employeeIDdb);
+					queryState.setInt(2, payID);
+					//updates the database
+					queryState.executeUpdate();
+					//catches any SQL exception
+				}catch(SQLException e){
+					//prints the error
+					e.printStackTrace();
+				}
+				//if the user wanted to add a pay than it runs this section
+			}else{
+				//tries to insert a new PayPerHour while generating a new payID
+				try{
+					//statement to add the Pay and auto-generate payID
+					PreparedStatement addState = DatabaseConnect.connection.prepareStatement("INSERT Into PayStat(PayPerHour) " +
+							"Values(?)", Statement.RETURN_GENERATED_KEYS);
+					//used to stop SQL injection
+					addState.setString(1, pay);
+					//updates the database
+					addState.executeUpdate();
+					//gets the auto-generated value from the database
+					try(ResultSet GeneratedKeys = addState.getGeneratedKeys()){
+						//gets the ID that is generated into payID
+						if(GeneratedKeys.next()){
+							payID = GeneratedKeys.getInt(1);
+						}else{
+							//if there is no generated keys than it throws the SQLException no id obtained
+							throw new SQLException("No ID obtained");
+						}
+					}
+					//tries to assign the employee to the payID
+					try{
+						//statement to insert values into pay
+						qState = DatabaseConnect.connection.prepareStatement("INSERT INTO Pay(EmployeeID, PayID) " +
+								"VALUES(?, ?)");
+						//used to stop SQL injection
+						qState.setInt(1, Employeedb.employeeIDdb);
+						qState.setInt(2, payID);
+						//updates the database
+						qState.executeUpdate();
+						//catches any SQL errors
+					}catch(SQLException e){
+						//prints the error
+						e.printStackTrace();
+					}
+					//if anything went wrong in the whole of it, it instead runs this to stop the program crashing
+				}catch(SQLException e){
+					//prints the error
+					e.printStackTrace();
+				}
+			}
+			//alert to tell the user that it will now be going back to the login scene
+			alert.setHeaderText("Returning");
+			alert.setContentText("Try logging in now");
+			alert.showAndWait();
+			//resets all variables so that it is effectively a new instance of the program
+			Reset.resetVar();
+			//new stage to return to the login scene
+			Stage back = new Stage();
+			//tries to run this section of the code
+			try {
+				//loads the scene
+				Parent root = FXMLLoader.load(getClass().getResource("/scene/login.fxml"));
+				//sets the scene
+				back.setScene(new Scene(root));
+				//sets the title
+				back.setTitle("Login");
+				//shows the stage
+				back.show();
+				//new object to run the methods in a class
+				LoginController controller = new LoginController();
+				//runs the method while parsing the current stage
+				controller.prepareStageEvents(back);
+				//any exception is caught by the program
+			} catch (IOException e) {
+				//prints the error
+				e.printStackTrace();
+			}
+			//closes the current stage
+			stage.close();
+		}
+
+
 	}
 }

@@ -108,6 +108,14 @@ public class LoginController {
 					ex.printStackTrace();
 					Main.terminate();
 				}
+				//if the login isn't verified than it runs this section of the code
+			}else{
+				//sets the header text of the dialog 
+				alert.setHeaderText("Wrong Username and Password!");
+				//sets the body text of the dialog
+				alert.setContentText("Please enter in the correct details!");
+				//shows the alert
+				alert.showAndWait();
 			}
 		}
 	}
