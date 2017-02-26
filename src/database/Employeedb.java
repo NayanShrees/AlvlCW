@@ -42,12 +42,10 @@ public class Employeedb {
 				}else {
 					throw new SQLException("No ID obtained.");
 				}
-
-			}catch(SQLException e) {
-				e.printStackTrace();
 			}
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 	}
 }

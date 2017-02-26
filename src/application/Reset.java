@@ -2,6 +2,7 @@ package application;
 
 import database.Employeedb;
 import database.Logindb;
+import sceneController.InsertController;
 
 public class Reset {
 	public static void resetVar() {
