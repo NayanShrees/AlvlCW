@@ -89,32 +89,43 @@ public class EmployeeController {
 
 	}
 
+	//method to generate the users info into a tableview
 	private void myInfo(){
+		//String array that contains the tables column names
 		String[] columnNames = {"EmployeeID", "FirstName", "Surname", "Age", "AddressLine1", "TownOrCity", "Postcode", "Number"};
+		//String containing the SQL statement to get the users date with the Where EmployeeID = + Employeedb.employeeIDdb limiting the results to the field that matches
 		String Query = "SELECT EmployeeID, FirstName, Surname, Age, AddressLine1, TownOrCity, Postcode, Number from Employee Where EmployeeID = " + Employeedb.employeeIDdb;
-
+		//generating columns
 		for (int i = 0; i < columnNames.length; i++) {
 			final int finalIdx = i;
+			//generating each column
 			TableColumn<ObservableList<String>, String> column = new TableColumn<>(columnNames[i]);
+			//setting cell values
 			column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx)));
+			//adding columns to the table
 			tbl_info.getColumns().add(column);
 		}
-
+		//setting the values to each column
 		tbl_info.setItems(DatabaseConnect.newTableView(Query, columnNames.length));
 		attendance();
 	}
 
 	private void attendance(){
+		//String array that contains the tables column names
 		String[] columnNames = {"EmployeeID", "Date", "Check In", "Check Out"};
+		//String containing the SQL statement to get the users date with the Where EmployeeID = + Employeedb.employeeIDdb limiting the results to the field that matches
 		String Query = "SELECT EmployeeID, Date, CheckIn, CheckOut, CheckedIn from CheckInOut Where EmployeeID = " + Employeedb.employeeIDdb;
-
+		//generating columns
 		for (int i = 0; i < columnNames.length; i++) {
 			final int finalIdx = i;
+			//setting cell values
 			TableColumn<ObservableList<String>, String> column = new TableColumn<>(columnNames[i]);
+			//setting cell values
 			column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx)));
+			//adding columns to the table
 			tbl_checkin.getColumns().add(column);
 		}
-
+		//setting the values to each column
 		tbl_checkin.setItems(DatabaseConnect.newTableView(Query, columnNames.length));
 	}
 

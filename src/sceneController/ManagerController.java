@@ -57,37 +57,54 @@ public class ManagerController {
 	}
 	
 	private void DateTime() {
+		//creating a new timeline animation
 		Timeline timeline = new Timeline(
+				//creating an animation
 				new KeyFrame(Duration.seconds(0),
 						new EventHandler<ActionEvent>() {
 					@Override public void handle(ActionEvent actionEvent) {
+						//calendar object which can be used to get time and day
 						Calendar time = Calendar.getInstance();
+						//formating the time so that it prints hour:minute:seconds
 						SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+						//setting the labels text as the current time
 						lbl_time.setText(simpleDateFormat.format(time.getTime()));
+						//Formating the date so that it now gets the day:month:year
 						simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+						//sets the labels date
 						lbl_date.setText(simpleDateFormat.format(time.getTime()));
 					}
 				}
 						),
+				//updates every second so that the time and date can be updated
 				new KeyFrame(Duration.seconds(1))
 				);
+		//sets the animation to continue indefinite
 		timeline.setCycleCount(Animation.INDEFINITE);
+		//plays the animation
 		timeline.play();
+		//carry onto next method
 		attendance();
 	}
 	
 	
 	public void attendance(){
+		//column names
 		String[] columnNames = {"EmployeeID", "First Name", "Second Name", "Date", "Check In", "Check Out"};
-		String Query = "SELECT Employee.EmployeeID, Employee.FirstName, Employee.Surname, CheckInOut.Date, CheckInOut.CheckIn, CheckInOut.CheckOut, CheckInOut.CheckedIn from CheckInOut INNER JOIN Employee ON Employee.EmployeeID = CheckInOut.EmployeeID";
-
+		//SQL Statement to get data from multiple tables
+		String Query = "SELECT Employee.EmployeeID, Employee.FirstName, Employee.Surname, CheckInOut.Date, CheckInOut.CheckIn, CheckInOut.CheckOut, CheckInOut.CheckedIn from CheckInOut INNER JOIN Employee "
+				+ "ON Employee.EmployeeID = CheckInOut.EmployeeID";
+		//generating columns
 		for (int i = 0; i < columnNames.length; i++) {
 			final int finalIdx = i;
+			//adding columns
 			TableColumn<ObservableList<String>, String> column = new TableColumn<>(columnNames[i]);
+			//setting columns value
 			column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx)));
+			//adding columns to the table
 			tbl_EmpCheck.getColumns().add(column);
 		}
-
+		//adding values to the table
 		tbl_EmpCheck.setItems(DatabaseConnect.newTableView(Query, columnNames.length));
 	}
 	
