@@ -36,19 +36,24 @@ public class Logindb {
 		}
 		return verified;
 	}
-
+//method to create a new login
 	public static void newLog(){
-		
+		//tries to run this section of the code
 		try {
+			//statement tries to insert values into the database
 			PreparedStatement addState = DatabaseConnect.connection.prepareStatement("INSERT INTO Login(EmployeeID, Manager, UserName, PassWord, Salt) " +
 					"VALUES(?, ?, ?, ?, ?)");
+			//used to stop SQL injection
 			addState.setInt(1, Employeedb.employeeIDdb);
 			addState.setBoolean(2, managerdb);
 			addState.setString(3, usernamedb);
 			addState.setString(4, passworddb);
 			addState.setString(5, sSalt);
+			//updates the database with the added variables
 			addState.executeUpdate();
+			//catches any SQL exceptions
 		} catch (SQLException ex) {
+			//prints the exceptions
 			ex.printStackTrace();
 		}
 	}
